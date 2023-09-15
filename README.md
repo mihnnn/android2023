@@ -7,10 +7,11 @@ Students are expected to:
 * Update student name and ID to this README file
 * Push your commits regularly, with proper commit messages
 
+KUS
 Student Info
 =======================
 
-* Name: *YourNameHere*
-* ID: *YourIdHere*
-* Group ID: *Your Group ID here*
+* Name: Trinh Tien Minh
+* ID: BI12-273
+* Group ID: G3 group7
 
