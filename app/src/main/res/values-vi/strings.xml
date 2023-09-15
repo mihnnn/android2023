@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">USTH Thời Tiết</string>
+    <string name="hanoi">Hà Nội\nViệt Nam</string>
+    <string name="paris">Pa-ri\nPháp</string>
+    <string name="toulouse">Toulouse\nPháp</string>
+    <string name="city">thành phố</string>
+</resources>

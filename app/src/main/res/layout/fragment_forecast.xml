@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ForecastFragment"
+    android:id="@+id/fragment_forecast">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+<!--        android:layout_margin="20dp"-->
+<!--        >-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+<!--            android:orientation="vertical">-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+<!--                android:orientation="horizontal"-->
+<!--                android:gravity="center">-->
+<!--                <TextView-->
+<!--                    android:textSize="@dimen/dp_20"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Mon"-->
+<!--                    android:paddingRight="40dp"-->
+<!--                    android:gravity="right">-->
+<!--                </TextView>-->
+<!--                <ImageView-->
+<!--                    android:layout_width="50dp"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    android:background="@drawable/cloudy_1"-->
+<!--                    android:paddingRight="40dp">-->
+<!--                </ImageView>-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+<!--                    android:orientation="vertical"-->
+<!--                    android:paddingLeft="50dp">-->
+<!--                    <TextView-->
+<!--                        android:textSize="@dimen/dp_20"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Partly Cloudy">-->
+<!--                    </TextView>-->
+<!--                    <TextView-->
+<!--                        android:textSize="@dimen/dp_20"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="24°C - 31°C">-->
+<!--                    </TextView>-->
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
