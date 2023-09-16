@@ -3,6 +3,7 @@ package vn.edu.usth.usthweather;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+//import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -141,11 +142,11 @@ public class WeatherActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
         tabLayout.setupWithViewPager(pager);
+        requestRuntimePermission();
 
         extractMP3File();
         playMP3File();
 
-        requestRuntimePermission();
     }
 
     private void requestRuntimePermission(){
