@@ -2,7 +2,12 @@ package vn.edu.usth.usthweather;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -11,12 +16,24 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int PAGE_COUNT = 3;
@@ -60,6 +77,59 @@ class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
 
 public class WeatherActivity extends AppCompatActivity {
 
+//    private static final int REQUEST_CODE_MANAGE_EXTERNAL_STORAGE = 1;
+    private static final String PERMISSION_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    private int STORAGE_PERMISSION_CODE = 1;
+    private MediaPlayer mediaPlayer;
+    private static final String MP3_FILE_PATH = Environment.getExternalStorageDirectory() + "/Music/hahaha.mp3";
+
+    public void extractMP3File() {
+        try {
+            File directory = new File(Environment.getExternalStorageDirectory() + "/Music");
+            if (!directory.exists()) {
+                directory.mkdirs();
+            } else {
+
+            }
+
+            InputStream inputStream = getAssets().open("hahaha.mp3");
+            OutputStream outputStream = new FileOutputStream(MP3_FILE_PATH);
+
+            byte[] buffer = new byte[8192];
+            int length;
+            while ((length = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, length);
+            }
+
+        inputStream.close();
+        outputStream.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    private void playMP3File() {
+        try {
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(MP3_FILE_PATH);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void stopMP3() {
+        try {
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(MP3_FILE_PATH);
+            mediaPlayer.pause();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,41 +142,36 @@ public class WeatherActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
         tabLayout.setupWithViewPager(pager);
 
+        extractMP3File();
+        playMP3File();
 
+        requestRuntimePermission();
+    }
 
-//        // Create a new Fragment to be placed in the activity layout
-//        FragmentManager managerFragment = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = managerFragment.beginTransaction();
-//
-//        WeatherAndForecastFragment bundleFragment = new WeatherAndForecastFragment();
-//
-//        // Add the fragment to the 'container' FrameLayout
-//        fragmentTransaction.add(R.id.bundle,bundleFragment);
-//        fragmentTransaction.commit();
-//
-//
-//        PagerAdapter adapter = new HomeFragmentPagerAdapter(
-//                getSupportFragmentManager(),
-//                this
-//        );
-//        ViewPager pager = (ViewPager) findViewById(R.id.pager);
-//        pager.setOffscreenPageLimit(3);
-//        pager.setAdapter(adapter);
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
-//        tabLayout.setupWithViewPager(pager);
-        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.hahaha);
-        mp.start();
+    private void requestRuntimePermission(){
+        if (ActivityCompat.checkSelfPermission(this, PERMISSION_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this, R.string.granted_notice, Toast.LENGTH_SHORT).show();
+        } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, PERMISSION_STORAGE)){
+            AlertDialog.Builder reqbuild = new AlertDialog.Builder(this);
+            reqbuild.setMessage(R.string.ask_permission_text)
+                    .setTitle(R.string.ask_permission_title)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.OK_text, (dialog, which) ->{
+                        ActivityCompat.requestPermissions(WeatherActivity.this, new String[]{PERMISSION_STORAGE}, STORAGE_PERMISSION_CODE);
+                    })
+                    .setNegativeButton(R.string.cancel_text, ((dialog, which) -> dialog.dismiss()));
+            reqbuild.show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{PERMISSION_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.i(TAG,"Start");
-        if (mp != null && !mp.isPlaying()) {
-            mp.start();
-        }
-
     }
+
     @Override
     protected  void onResume() {
         super.onResume();
@@ -116,6 +181,8 @@ public class WeatherActivity extends AppCompatActivity {
     protected  void onPause() {
         super.onPause();
         Log.i(TAG,"Pause");
+
+
     }
     @Override
     protected  void onStop() {
