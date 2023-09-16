@@ -11,6 +11,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
@@ -71,6 +72,8 @@ public class WeatherActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
         tabLayout.setupWithViewPager(pager);
 
+
+
 //        // Create a new Fragment to be placed in the activity layout
 //        FragmentManager managerFragment = getSupportFragmentManager();
 //        FragmentTransaction fragmentTransaction = managerFragment.beginTransaction();
@@ -91,12 +94,18 @@ public class WeatherActivity extends AppCompatActivity {
 //        pager.setAdapter(adapter);
 //        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
 //        tabLayout.setupWithViewPager(pager);
+        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.hahaha);
+        mp.start();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.i(TAG,"Start");
+        if (mp != null && !mp.isPlaying()) {
+            mp.start();
+        }
+
     }
     @Override
     protected  void onResume() {
