@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -79,7 +80,7 @@ class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
 public class WeatherActivity extends AppCompatActivity {
 
 //    private static final int REQUEST_CODE_MANAGE_EXTERNAL_STORAGE = 1;
-    private static final String PERMISSION_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+//    private static final String PERMISSION_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     private int STORAGE_PERMISSION_CODE = 1;
     private MediaPlayer mediaPlayer;
     private static final String MP3_FILE_PATH = Environment.getExternalStorageDirectory() + "/Music/hahaha.mp3";
@@ -142,7 +143,12 @@ public class WeatherActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
         tabLayout.setupWithViewPager(pager);
-        requestRuntimePermission();
+
+        if (ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(WeatherActivity.this,R.string.granted_notice,Toast.LENGTH_SHORT).show();
+        } else {
+            requestRuntimePermission();
+        }
 
         extractMP3File();
         playMP3File();
@@ -150,20 +156,20 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private void requestRuntimePermission(){
-        if (ActivityCompat.checkSelfPermission(this, PERMISSION_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(this, R.string.granted_notice, Toast.LENGTH_SHORT).show();
-        } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, PERMISSION_STORAGE)){
-            AlertDialog.Builder reqbuild = new AlertDialog.Builder(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(WeatherActivity.this, R.string.granted_notice, Toast.LENGTH_SHORT).show();
+        } else if (ActivityCompat.shouldShowRequestPermissionRationale(WeatherActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+            AlertDialog.Builder reqbuild = new AlertDialog.Builder(WeatherActivity.this);
             reqbuild.setMessage(R.string.ask_permission_text)
                     .setTitle(R.string.ask_permission_title)
                     .setCancelable(false)
                     .setPositiveButton(R.string.OK_text, (dialog, which) ->{
-                        ActivityCompat.requestPermissions(WeatherActivity.this, new String[]{PERMISSION_STORAGE}, STORAGE_PERMISSION_CODE);
+                        ActivityCompat.requestPermissions(WeatherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
                     })
                     .setNegativeButton(R.string.cancel_text, ((dialog, which) -> dialog.dismiss()));
             reqbuild.show();
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{PERMISSION_STORAGE}, STORAGE_PERMISSION_CODE);
+            ActivityCompat.requestPermissions(WeatherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
         }
     }
 
